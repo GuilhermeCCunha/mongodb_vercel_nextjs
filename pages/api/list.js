@@ -5,14 +5,14 @@ export default async function handler(request, response){
     try {
         // const { mongoClient } = await connectToDatabase();
         const mongoClient = await clientPromise;
-        const db = mongoClient.db("sample_restaurants");
-        const collection = db.collection("restaurants");
+        const db = mongoClient.db("loja_carros");
+        const collection = db.collection("carros");
         const results = await collection
           .find({})
           .project({
             grades: 0,
             borough: 0,
-            restaurant_id: 0,
+            carro_id: 0,
           })
           .limit(10)
           .toArray();

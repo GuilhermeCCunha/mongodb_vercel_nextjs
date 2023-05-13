@@ -29,13 +29,13 @@ export async function getServerSideProps() {
 export default function Home({
   isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [restaurants, setRestaurants] = useState<any[]>([])
+  const [carros, setCarros] = useState<any[]>([])
 
   useEffect(() => {
     (async () => {
       const results = await fetch("/api/list");
       const resultsJson = await results.json();
-      setRestaurants(resultsJson);
+      setCarros(resultsJson);
     })();
   },[]);
 
@@ -53,10 +53,11 @@ export default function Home({
 
         
       <div className="grid">
-        {restaurants.map((restaurant) => (
-          <div className="card" key={restaurant._id}>
-            <h2>{restaurant.name}</h2>
-            <p>{restaurant.cuisine}</p>
+        {carros.map((carro) => (
+          <div className="card" key={carro._id}>
+            <h2>{carro.nome}</h2>
+            <p>{carro.cor}</p>
+            <p>{carro.ano}</p>
           </div>
         )
         )}
