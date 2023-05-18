@@ -26,25 +26,32 @@ export async function getServerSideProps() {
   }
 }
 
-export default function DeletePage({
+export default function PutPage({
   isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
- const [id, setId] = useState([]);
- 
+ const [id, setId] = useState([]);   
+ const [data, setData] = useState([]);
+ const [nome, setNome] = useState([]);
+ const [cor, setCor] = useState([]);
+ const [ano, setAno] = useState([]);
   
- const deleteEvent = (id:any) => {
-  
-  fetch(`/api/${id}`, {
-    method: 'DELETE',
+ const putEvent = (id:any, nome:any, cor:any, ano:any) => {
+  let data = {
+    nome:`${nome}`,
+    cor:`${cor}`,
+    ano:`${ano}`
+  }
+  fetch(`/api/update/${id}`, {
+    method: 'PUT',
     headers:{
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin':'*'
     },
-    // body:JSON.stringify(data)
+    body:JSON.stringify(data)
   })
   .then(response => response.json()).then(json => {
     console.log("json", json)
-    // setData(json)
+    setData(json)
   }).catch(e => {
     console.log("e", e)
   })
@@ -59,9 +66,9 @@ export default function DeletePage({
 
       <main>
         <h1 className="title">
-          Delete 
+          PUT
         </h1>
-        
+
 
         <input 
             placeholder="id"
@@ -69,10 +76,30 @@ export default function DeletePage({
             id="id"
             name="id"
             onChange={evento => setId(evento.target.value as any)}
+          /> 
+        <input 
+            placeholder="nome"
+            type={"text"}
+            id="nome"
+            name="nome"
+            onChange={evento => setNome(evento.target.value as any)}
           />
-        
+          <input 
+            placeholder="cor"
+            type={"text"}
+            id="cor"
+            name="cor"
+            onChange={evento => setCor(evento.target.value as any)}
+          />
+          <input 
+            placeholder="ano"
+            type={"text"}
+            id="ano"
+            name="ano"
+            onChange={evento => setAno(evento.target.value as any)}
+          />
 
-        <button onClick={() =>{deleteEvent(id); location.replace("/")} }>Deletar</button>
+        <button onClick={() =>{putEvent(id,nome,cor,ano); location.replace("/")} }>Atualizar</button>
 
       </main>
 {/* 

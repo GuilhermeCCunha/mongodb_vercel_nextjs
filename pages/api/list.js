@@ -15,7 +15,7 @@ export default async function handler(request, response) {
           borough: 0,
           carro_id: 0,
         })
-        .limit(10)
+        .limit(12)
         .toArray();
 
       response.status(200).json(results);
