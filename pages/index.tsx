@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { InferGetServerSidePropsType } from 'next'
+import useRouter from 'next/router'
 
 export async function getServerSideProps() {
   try {
@@ -30,14 +31,21 @@ export default function Home({
   isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [carros, setCarros] = useState<any[]>([])
-
+  // const[carroId, setCarroId ] = useState()
   useEffect(() => {
     (async () => {
       const results = await fetch("/api/list");
       const resultsJson = await results.json();
       setCarros(resultsJson);
     })();
-  },[]);
+  }, []);
+
+  function sendProps(carroId : any) {
+    useRouter.push({
+      pathname: "/delete",
+      query: {carroId}
+    })
+  }
 
   return (
     <div className="container">
@@ -51,17 +59,18 @@ export default function Home({
           Welcome to <a href="https://nextjs.org">Next.js with MongoDB!</a>
         </h1>
 
-        
-      <div className="grid">
-        {carros.map((carro) => (
-          <div className="card" key={carro._id}>
-            <h2>{carro.nome}</h2>
-            <p>{carro.cor}</p>
-            <p>{carro.ano}</p>
-          </div>
-        )
-        )}
-      </div>
+
+        <div className="grid">
+          {carros.map((carro) => (
+           <div className="card" key={carro._id}>
+              <a className="formEle" onClick={(event) =>  {event.preventDefault() ;sendProps(carro._id)}}><h6>deletar</h6> </a>
+              <h2>{carro.nome}</h2>
+              <p>{carro.cor}</p>
+              <p>{carro.ano}</p>
+            </div>
+          )
+          )}
+        </div>
 
       </main>
 
@@ -168,6 +177,10 @@ export default function Home({
           max-width: 800px;
           margin-top: 3rem;
         }
+         
+        .formEle {
+          display: none;
+        }
 
         .card {
           margin: 1rem;
@@ -186,6 +199,11 @@ export default function Home({
         .card:active {
           color: #0070f3;
           border-color: #0070f3;
+          .formEle {
+            display: block;
+            cursor: pointer;
+            color: #F00;
+          }
         }
 
         .card h3 {

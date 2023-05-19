@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { InferGetServerSidePropsType } from 'next'
+import { useRouter } from 'next/router'
 
 export async function getServerSideProps() {
   try {
@@ -29,8 +30,18 @@ export async function getServerSideProps() {
 export default function DeletePage({
   isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [id, setId] = useState([]);
-
+  const router = useRouter();
+  const { query: {carroId}} = router
+  const props = {carroId };
+  const [id, setId] = useState('');
+ 
+   useEffect(() => {
+    if (router.isReady) {
+      // Code using query
+      // console.log(props.carroId);
+      setId(props.carroId as any);
+    }
+  }, [router.isReady]);
 
   const deleteEvent = (id: any) => {
 
@@ -68,6 +79,7 @@ export default function DeletePage({
             type={"text"}
             id="id"
             name="id"
+            value={id}
             onChange={evento => setId(evento.target.value as any)}
             required
           />
