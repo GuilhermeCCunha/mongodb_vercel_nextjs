@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { InferGetServerSidePropsType } from 'next'
+import { useRouter } from 'next/router'
 
 export async function getServerSideProps() {
   try {
@@ -29,11 +30,25 @@ export async function getServerSideProps() {
 export default function PutPage({
   isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
+  const { query: {carroId, carroNome, carroCor, carroAno}} = router
+  const props = {carroId, carroNome, carroCor, carroAno };
   const [id, setId] = useState([]);
   const [data, setData] = useState([]);
   const [nome, setNome] = useState([]);
   const [cor, setCor] = useState([]);
   const [ano, setAno] = useState([]);
+
+  useEffect(() => {
+    if (router.isReady) {
+      // Code using query
+      // console.log(props.carroId);
+      setId(props.carroId as any);
+      setNome(props.carroNome as any);
+      setCor(props.carroCor as any);
+      setAno(props.carroAno as any);
+    }
+  }, [router.isReady]);
 
   const putEvent = (id: any, nome: any, cor: any, ano: any) => {
     let data = {
@@ -75,6 +90,7 @@ export default function PutPage({
             type={"text"}
             id="id"
             name="id"
+            value={id}
             onChange={evento => setId(evento.target.value as any)}
             required
           />
@@ -84,6 +100,7 @@ export default function PutPage({
             type={"text"}
             id="nome"
             name="nome"
+            value={nome}
             onChange={evento => setNome(evento.target.value as any)}
             required
           />
@@ -93,6 +110,7 @@ export default function PutPage({
             type={"text"}
             id="cor"
             name="cor"
+            value={cor}
             onChange={evento => setCor(evento.target.value as any)}
             required
           />
@@ -102,6 +120,7 @@ export default function PutPage({
             type={"text"}
             id="ano"
             name="ano"
+            value={ano}
             onChange={evento => setAno(evento.target.value as any)}
             required
           />

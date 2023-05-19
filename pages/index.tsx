@@ -47,6 +47,13 @@ export default function Home({
     })
   }
 
+  function sendPropsPut(carroId : any, carroNome : any, carroCor : any, carroAno : any,) {
+    useRouter.push({
+      pathname: "/put",
+      query: {carroId, carroNome, carroCor, carroAno}
+    })
+  }
+
   return (
     <div className="container">
       <Head>
@@ -64,6 +71,7 @@ export default function Home({
           {carros.map((carro) => (
            <div className="card" key={carro._id}>
               <a className="formEle" onClick={(event) =>  {event.preventDefault() ;sendProps(carro._id)}}><h6>deletar</h6> </a>
+              <a className="formEdit" onClick={(event) =>  {event.preventDefault() ;sendPropsPut(carro._id, carro.nome, carro.cor, carro.ano)}}><h6>editar</h6> </a>
               <h2>{carro.nome}</h2>
               <p>{carro.cor}</p>
               <p>{carro.ano}</p>
@@ -177,7 +185,10 @@ export default function Home({
           max-width: 800px;
           margin-top: 3rem;
         }
-         
+
+        .formEdit{
+          display: none;
+        }
         .formEle {
           display: none;
         }
@@ -203,6 +214,11 @@ export default function Home({
             display: block;
             cursor: pointer;
             color: #F00;
+          }
+          .formEdit {
+            display: block;
+            cursor: pointer;
+            color: #070;
           }
         }
 
