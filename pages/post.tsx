@@ -29,32 +29,32 @@ export async function getServerSideProps() {
 export default function PostPage({
   isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
- const [data, setData] = useState([]);
- const [nome, setNome] = useState([]);
- const [cor, setCor] = useState([]);
- const [ano, setAno] = useState([]);
-  
- const postPutEvent = (nome:any, cor:any, ano:any) => {
-  let data = {
-    nome:`${nome}`,
-    cor:`${cor}`,
-    ano:`${ano}`
+  const [data, setData] = useState([]);
+  const [nome, setNome] = useState([]);
+  const [cor, setCor] = useState([]);
+  const [ano, setAno] = useState([]);
+
+  const postEvent = (nome: any, cor: any, ano: any) => {
+    let data = {
+      nome: `${nome}`,
+      cor: `${cor}`,
+      ano: `${ano}`
+    }
+    fetch("/api/list", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json()).then(json => {
+        console.log("json", json)
+        setData(json)
+      }).catch(e => {
+        console.log("e", e)
+      })
   }
-  fetch("/api/list", {
-    method: 'POST',
-    headers:{
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin':'*'
-    },
-    body:JSON.stringify(data)
-  })
-  .then(response => response.json()).then(json => {
-    console.log("json", json)
-    setData(json)
-  }).catch(e => {
-    console.log("e", e)
-  })
- }
 
   return (
     <div className="container">
@@ -67,34 +67,39 @@ export default function PostPage({
         <h1 className="title">
           Posts
         </h1>
-        
 
-        <input 
+        <form onSubmit={(evento) => { evento.preventDefault(); postEvent(nome, cor, ano); location.replace("/") }}>
+          <input
             placeholder="nome"
             type={"text"}
             id="nome"
             name="nome"
             onChange={evento => setNome(evento.target.value as any)}
+            required
           />
-          <input 
+          <br />
+          <input
             placeholder="cor"
             type={"text"}
             id="cor"
             name="cor"
             onChange={evento => setCor(evento.target.value as any)}
+            required
           />
-          <input 
+          <br />
+          <input
             placeholder="ano"
             type={"text"}
             id="ano"
             name="ano"
             onChange={evento => setAno(evento.target.value as any)}
+            required
           />
-
-        <button onClick={() =>{postPutEvent(nome,cor,ano); location.replace("/")} }>Postar</button>
-
+          <br />
+          <button type="submit">Postar</button>
+        </form>
       </main>
-{/* 
+      {/* 
       <footer>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"

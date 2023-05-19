@@ -29,26 +29,26 @@ export async function getServerSideProps() {
 export default function DeletePage({
   isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
- const [id, setId] = useState([]);
- 
-  
- const deleteEvent = (id:any) => {
-  
-  fetch(`/api/${id}`, {
-    method: 'DELETE',
-    headers:{
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin':'*'
-    },
-    // body:JSON.stringify(data)
-  })
-  .then(response => response.json()).then(json => {
-    console.log("json", json)
-    // setData(json)
-  }).catch(e => {
-    console.log("e", e)
-  })
- }
+  const [id, setId] = useState([]);
+
+
+  const deleteEvent = (id: any) => {
+
+    fetch(`/api/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      // body:JSON.stringify(data)
+    })
+      .then(response => response.json()).then(json => {
+        console.log("json", json)
+        // setData(json)
+      }).catch(e => {
+        console.log("e", e)
+      })
+  }
 
   return (
     <div className="container">
@@ -59,23 +59,25 @@ export default function DeletePage({
 
       <main>
         <h1 className="title">
-          Delete 
+          Delete
         </h1>
-        
 
-        <input 
+        <form onSubmit={(evento) => { evento.preventDefault(); deleteEvent(id); location.replace("/") }}>
+          <input
             placeholder="id"
             type={"text"}
             id="id"
             name="id"
             onChange={evento => setId(evento.target.value as any)}
+            required
           />
-        
+          <br />
 
-        <button onClick={() =>{deleteEvent(id); location.replace("/")} }>Deletar</button>
+          <button type="submit">Deletar</button>
+        </form>
 
       </main>
-{/* 
+      {/* 
       <footer>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
